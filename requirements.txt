@@ -12,7 +12,7 @@ python-multipart>=0.0.10
 sounddevice>=0.5.1
 soundfile>=0.12.1
 uvicorn>=0.30.6
-openai[realtime]>=1.63.0
+openai[realtime]
 aiostream>=0.6.4
 cachetools>=5.5.1
 httpx-ws>=0.7.1
