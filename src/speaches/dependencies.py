@@ -20,7 +20,7 @@ from openai.resources.audio import AsyncSpeech, AsyncTranscriptions
 from openai.resources.chat.completions import AsyncCompletions
 
 from speaches.config import Config
-from speaches.model_manager import KokoroModelManager, PiperModelManager, WhisperModelManager
+from speaches.model_manager import PiperModelManager, WhisperModelManager
 
 logger = logging.getLogger(__name__)
 
@@ -55,13 +55,13 @@ def get_piper_model_manager() -> PiperModelManager:
 PiperModelManagerDependency = Annotated[PiperModelManager, Depends(get_piper_model_manager)]
 
 
-@lru_cache
-def get_kokoro_model_manager() -> KokoroModelManager:
-    config = get_config()
-    return KokoroModelManager(config.whisper.ttl)  # HACK: should have its own config
-
-
-KokoroModelManagerDependency = Annotated[KokoroModelManager, Depends(get_kokoro_model_manager)]
+# @lru_cache
+# def get_kokoro_model_manager() -> KokoroModelManager:
+#     config = get_config()
+#     return KokoroModelManager(config.whisper.ttl)  # HACK: should have its own config
+#
+#
+# KokoroModelManagerDependency = Annotated[KokoroModelManager, Depends(get_kokoro_model_manager)]
 
 security = HTTPBearer()
 

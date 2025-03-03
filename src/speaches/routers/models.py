@@ -5,7 +5,7 @@ from fastapi import (
     HTTPException,
 )
 
-from speaches import kokoro_utils, piper_utils
+from speaches import piper_utils
 from speaches.api_types import (
     ListModelsResponse,
     Model,
@@ -23,7 +23,7 @@ router = APIRouter(tags=["models"])
 def get_models(task: ModelTask | None = None) -> ListModelsResponse:
     models: list[Model] = []
     if task is None or task == "text-to-speech":
-        models.extend(kokoro_utils.get_kokoro_models())
+        # models.extend(kokoro_utils.get_kokoro_models())
         models.extend(piper_utils.get_piper_models())
     if task is None or task == "automatic-speech-recognition":
         if os.getenv("HF_HUB_OFFLINE") is not None:
@@ -37,7 +37,7 @@ def get_models(task: ModelTask | None = None) -> ListModelsResponse:
 @router.get("/v1/models/{model_id:path}")
 def get_model(model_id: ModelId) -> Model:
     models: list[Model] = []
-    models.extend(kokoro_utils.get_kokoro_models())
+    # models.extend(kokoro_utils.get_kokoro_models())
     models.extend(piper_utils.get_piper_models())
     if os.getenv("HF_HUB_OFFLINE") is not None:
         models.extend(list(list_local_whisper_models()))
