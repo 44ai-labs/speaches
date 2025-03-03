@@ -25,14 +25,14 @@ class WhisperConfig(BaseModel):
     device_index: int | list[int] = 0
     compute_type: Quantization = "default"  # TODO: should this even be a configuration option?
     cpu_threads: int = 0
-    num_workers: int = 1
-    ttl: int = Field(default=300, ge=-1)
+    num_workers: int = 8
+    ttl: int =  -1 # Field(default=300, ge=-1)
     """
     Time in seconds until the model is unloaded if it is not being used.
     -1: Never unload the model.
     0: Unload the model immediately after usage.
     """
-    use_batched_mode: bool = False
+    use_batched_mode: bool = True
     """
     Whether to use batch mode(introduced in 1.1.0 `faster-whisper` release) for inference. This will likely become the default in the future and the configuration option will be removed.
     """
@@ -53,7 +53,7 @@ class Config(BaseSettings):
     """
     If set, the API key will be required for all requests.
     """
-    log_level: str = "debug"
+    log_level: str = "info"
     """
     Logging level. One of: 'debug', 'info', 'warning', 'error', 'critical'.
     """
@@ -67,7 +67,7 @@ class Config(BaseSettings):
         `export ALLOW_ORIGINS='["*"]'`
     """
 
-    enable_ui: bool = True
+    enable_ui: bool = False
     """
     Whether to enable the Gradio UI. You may want to disable this if you want to minimize the dependencies and slightly improve the startup time.
     """
