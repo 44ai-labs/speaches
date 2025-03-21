@@ -3,6 +3,7 @@ from collections.abc import Generator, Iterable
 import logging
 from typing import Annotated, Literal
 
+
 from fastapi import (
     APIRouter,
     Form,
@@ -11,6 +12,7 @@ from fastapi import (
 )
 from fastapi.responses import StreamingResponse
 from faster_whisper.transcribe import BatchedInferencePipeline, TranscriptionInfo
+import ctranslate2
 
 from speaches.api_types import (
     DEFAULT_TIMESTAMP_GRANULARITIES,
@@ -160,6 +162,7 @@ def transcribe_file(
     hotwords: Annotated[str | None, Form()] = None,
     vad_filter: Annotated[bool, Form()] = False,
     repetition_penalty: Annotated[float | None, Form()] = None,
+    seed: Annotated[int | None, Form()] = 4419,
 ) -> Response | StreamingResponse:
     timestamp_granularities = asyncio.run(get_timestamp_granularities(request))
     if timestamp_granularities != DEFAULT_TIMESTAMP_GRANULARITIES and response_format != "verbose_json":
@@ -168,6 +171,7 @@ def transcribe_file(
         )
     with model_manager.load_model(model) as whisper:
         whisper_model = BatchedInferencePipeline(model=whisper) if config.whisper.use_batched_mode else whisper
+        ctranslate2.set_random_seed(seed)
         segments, transcription_info = whisper_model.transcribe(
             audio,
             task="transcribe",
