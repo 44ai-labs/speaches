@@ -177,7 +177,7 @@ def transcribe_file(
             task="transcribe",
             language=language,
             initial_prompt=prompt,
-            word_timestamps="word" in timestamp_granularities,
+            word_timestamps=True, # "word" in timestamp_granularities,
             temperature=temperature,
             vad_filter=vad_filter,
             hotwords=hotwords,
