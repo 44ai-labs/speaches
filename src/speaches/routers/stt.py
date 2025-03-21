@@ -159,6 +159,7 @@ def transcribe_file(
     stream: Annotated[bool, Form()] = False,
     hotwords: Annotated[str | None, Form()] = None,
     vad_filter: Annotated[bool, Form()] = False,
+    repetition_penalty: Annotated[float | None, Form()] = None,
 ) -> Response | StreamingResponse:
     timestamp_granularities = asyncio.run(get_timestamp_granularities(request))
     if timestamp_granularities != DEFAULT_TIMESTAMP_GRANULARITIES and response_format != "verbose_json":
@@ -176,6 +177,7 @@ def transcribe_file(
             temperature=temperature,
             vad_filter=vad_filter,
             hotwords=hotwords,
+            repetition_penalty=repetition_penalty,
         )
         segments = TranscriptionSegment.from_faster_whisper_segments(segments)
 
