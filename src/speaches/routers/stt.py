@@ -2,6 +2,9 @@ import asyncio
 from collections.abc import Generator, Iterable
 import logging
 from typing import Annotated, Literal
+import torch
+import numpy as np
+import random
 
 
 from fastapi import (
@@ -173,7 +176,16 @@ def transcribe_file(
         )
     with model_manager.load_model(model) as whisper:
         whisper_model = BatchedInferencePipeline(model=whisper) if config.whisper.use_batched_mode else whisper
+        # seeding but it is not working fully...
+        # torch.backends.cudnn.deterministic = True
+        # torch.backends.cudnn.benchmark = False
+        torch.manual_seed(seed)
+        if torch.cuda.is_available():
+            torch.cuda.manual_seed_all(seed)
         ctranslate2.set_random_seed(seed)
+        # np.random.seed(seed)
+        # random.seed(seed)
+        # end seeding
         segments, transcription_info = whisper_model.transcribe(
             audio,
             task="transcribe",
@@ -186,6 +198,7 @@ def transcribe_file(
             repetition_penalty=repetition_penalty,
             best_of=best_of,
             beam_size=beam_size,
+            batch_size=5,
         )
         segments = TranscriptionSegment.from_faster_whisper_segments(segments)
 
