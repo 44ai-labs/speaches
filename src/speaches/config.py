@@ -23,7 +23,7 @@ class WhisperConfig(BaseModel):
 
     inference_device: Device = "auto"
     device_index: int | list[int] = 0
-    compute_type: Quantization = "default"  # TODO: should this even be a configuration option?
+    compute_type: Quantization = "default" # "float16" # "default"  # TODO: should this even be a configuration option?
     cpu_threads: int = 0
     num_workers: int = 8
     ttl: int =  -1 # Field(default=300, ge=-1)
