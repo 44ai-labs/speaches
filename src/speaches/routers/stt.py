@@ -198,7 +198,7 @@ def transcribe_file(
             repetition_penalty=repetition_penalty,
             best_of=best_of,
             beam_size=beam_size,
-            batch_size=5,
+            # batch_size=5,
         )
         segments = TranscriptionSegment.from_faster_whisper_segments(segments)
 
